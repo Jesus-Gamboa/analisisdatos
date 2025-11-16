@@ -100,35 +100,36 @@ remplazos_subarea = {
     'AVIACI�N': 'AVIACION'
 }
 
-remplasos_nivel = {
-    'NO INDICA': 'NO REGISTRA',
-    'PREGRADO - PROFESIONAL': 'PREGRADO',
-    'PREGRADO PROFESIONAL': 'PREGRADO',
-    'BACHILLERATO': 'BACHILLERATO',
-    'POSTGRADO - ESPECIALIZACION': 'ESPECIALIZACION',
-    'POSTGRADO - ESPECIALIZACI�N': 'ESPECIALIZACION',
-    'NO REGISTRA': 'NO REGISTRA',
-    'SIN PROFESION': 'SIN PROFESION',
-    'SIN PROFESI�N': 'SIN PROFESION',
-    'UNIVERSITARIO': 'PREGRADO',
-    'TECNICA PROFESIONAL': 'TECNICO PROFESIONAL',
-    'T�CNICA PROFESIONAL': 'TECNICO PROFESIONAL',
-    'ESPECIALIZACI�N': 'ESPECIALIZACION',
-    'TECNOLÓGICA': 'TECNICO PROFESIONAL',
-    'TECNOL�GICA': 'TECNICO PROFESIONAL',
-    'POSTGRADO POSTGRADO POSTGRADO POSTGRADO ESPECIALIZACION': 'ESPECIALIZACION',
-    'POSTGRADO POSTGRADO POSTGRADO POSTGRADO POSTGRADO MAESTRIA': 'MAESTRIA',
-    'POSTGRADO POSTGRADO POSTGRADO POSTGRADO POSTGRADO DOCTORADO': 'DOCTORADO',
-    'POSTGRADO POSTGRADO POSTGRADO POSTGRADO MAESTRIA': 'MAESTRIA',
-    'POSTGRADO POSTGRADO POSTGRADO POSTGRADO DOCTORADO': 'DOCTORADO',
-    '(NO REGISTRA)': 'NO REGISTRA',
-    'SIN PROFESION':'NO REGISTRA',
-    'NO INDICA':'NO REGISTRA',
-    '(NINGUNO)':'NO REGISTRA'
-}
 
-# APLICAR REEMPLAZOS
-df['Nivel Académico'] = df['Nivel Académico'].replace(remplasos_nivel, regex=True)
+df['Nivel Académico'] = df['Nivel Académico'].str.upper()
+df['Nivel Académico'] = (df['Nivel Académico']
+                         .str.replace('Á', 'A')
+                         .str.replace('É', 'E')
+                         .str.replace('Í', 'I')
+                         .str.replace('Ó', 'O')
+                         .str.replace('Ú', 'U')
+                         .str.replace('�', ''))
+
+df.loc[df['Nivel Académico'].str.contains('PRIMARIA', na=False), 'Nivel Académico'] = 'PRIMARIA'
+df.loc[df['Nivel Académico'] == 'BACHILLERATO', 'Nivel Académico'] = 'BACHILLERATO'
+
+df.loc[df['Nivel Académico'].str.contains(
+    'TECNIC|TCNIC|TCN|TECNOL', na=False
+), 'Nivel Académico'] = 'TECNICO PROFESIONAL'
+
+df.loc[df['Nivel Académico'].isin([
+    'PREGRADO - PROFESIONAL', 'PREGRADO PROFESIONAL', 'PREGRADO', 'UNIVERSITARIO'
+]), 'Nivel Académico'] = 'PREGRADO'
+
+df.loc[df['Nivel Académico'].str.contains('ESPECIAL', na=False), 'Nivel Académico'] = 'ESPECIALIZACION'
+df.loc[df['Nivel Académico'].str.contains('MAEST', na=False), 'Nivel Académico'] = 'MAESTRIA'
+df.loc[df['Nivel Académico'].str.contains('DOCTOR', na=False), 'Nivel Académico'] = 'DOCTORADO'
+
+df.loc[df['Nivel Académico'].isin([
+    'NO INDICA', '(NO REGISTRA)', 'NINGUNO', 'SIN PROFESION', 'SIN PROFESI', 'SIN PROFESIN'
+]), 'Nivel Académico'] = 'NO REGISTRA'
+
+
 df['Área Conocimiento'] = df['Área Conocimiento'].replace(remplasos_area, regex=True)
 df['Sub Area Conocimiento'] = df['Sub Area Conocimiento'].replace(remplazos_subarea, regex=True)
 
