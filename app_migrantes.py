@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+import streamlit as st
 
 
 df = pd.read_excel('data/Colombianos_registrados_en_el_exterior_20251113 (1).xlsx', engine='openpyxl')
