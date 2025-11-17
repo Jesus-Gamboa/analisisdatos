@@ -260,5 +260,5 @@ with st.sidebar:
     st.markdown('[Nivel académico por género](#genero)')
     st.markdown('[Distribución por país](#tortas)')
     st.markdown('---')
-    st.caption('jarmando.canas@udea.edu.co --- mariana.trujillo2@udea.edu.co')
+    st.caption('jarmando.canas@udea.edu.co \n mariana.trujillo2@udea.edu.co')
     
