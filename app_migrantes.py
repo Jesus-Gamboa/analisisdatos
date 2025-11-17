@@ -4,6 +4,7 @@ import seaborn as sns
 import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
+import numpy as np
 
 
 # ============================
@@ -23,6 +24,8 @@ list_paises = Df_final['País'].unique().tolist()
 numero_etnias = Df_final['Etnia de la persona'].nunique()
 list_areas = Df_final['Área Conocimiento'].dropna().unique().tolist()
 list_etnia = Df_final['Etnia de la persona'].dropna().unique().tolist()
+
+
 
 # ============================
 # CONFIGURACIÓN STREAMLIT
@@ -83,91 +86,126 @@ with st.expander('Top 5 departamentos con más migrantes'):
     st.plotly_chart(fig2, use_container_width=True)
 
 
-# ============================
-# GRUPO DE EDAD POR PAÍS
-# ============================
-st.markdown('<a id="edad"></a><br><br>', unsafe_allow_html=True)
+
+st.markdown('<a id="explorador"></a><br><br>', unsafe_allow_html=True)
 with st.container(border=True):
-    st.html('<font size=5><font color=#3D6E85>Migrantes por grupo de edad en cada país</font>')
 
-    pais_selec = st.selectbox('Selecciona un país:', list_paises)
+    st.html('<font size=6><font color=#3D6E85>Explorador</font>')
+    col5,col6 = st.columns(2)
 
-    df_edad = Df_final.groupby('Grupo edad')['País'].value_counts().unstack().fillna(0)
-    df_pais = df_edad[pais_selec]
+    # ============================
+    # GRUPO DE EDAD POR PAÍS
+    # ============================
+    with col5:
+        st.html('<font size=5><font color=#3D6E85>Migrantes por grupo de edad en cada país</font>')
 
-    fig_barras = go.Figure()
-    fig_barras.add_trace(go.Bar(
-        x=df_pais.values,
-        y=df_pais.index,
-        orientation='h',
-        marker_color='#4E7F96'
-    ))
+        pais_selec = st.selectbox('Selecciona un país:', list_paises)
 
-    fig_barras.update_layout(
-        height=400,
-        xaxis_title='Migrantes',
-        yaxis_title='Grupo de edad',
-        showlegend=False
-    )
-    st.plotly_chart(fig_barras, use_container_width=True)
-# ============================
-# GRUPO DE etnia POR PAÍS
-# ============================
+        df_edad = Df_final.groupby('Grupo edad')['País'].value_counts().unstack().fillna(0)
+        df_pais = df_edad[pais_selec]
 
-st.markdown('<a id="etnia"></a><br><br>', unsafe_allow_html=True)
-with st.container(border=True):
-    st.html('<font size=5><font color=#3D6E85>Etnia cada país</font>')
-    
-    etnia_selec = st.selectbox('Selecciona un país:', list_etnia)
+        fig_barras = go.Figure()
+        fig_barras.add_trace(go.Bar(
+            x=df_pais.values,
+            y=df_pais.index,
+            orientation='h',
+            marker_color='#4E7F96'
+        ))
 
-    condicion = Df_final['Etnia de la persona'] == etnia_selec
-    df_pais = Df_final.groupby('País')['Etnia de la persona'].value_counts().unstack().fillna(0)
-    df_etnia = df_pais[etnia_selec]
-
-    fig_barras = go.Figure()
-    fig_barras.add_trace(go.Bar(
-        x=df_etnia.values,
-        y=df_etnia.index,
-        orientation='h',
-        marker_color='#4E7F96'
-    ))
-
-    fig_barras.update_layout(
-        height=400,
-        xaxis_title='Migrantes',
-        yaxis_title='País',
-        showlegend=False
-    )
-    st.plotly_chart(fig_barras, use_container_width=True)
+        fig_barras.update_layout(
+            height=400,
+            xaxis_title='Migrantes',
+            yaxis_title='Grupo de edad',
+            showlegend=False
+        )
+        st.plotly_chart(fig_barras, use_container_width=True)
+    # ============================
+    # GRUPO DE etnia POR PAÍS
+    # ============================
 
 
-# ============================
-# SUBÁREA DE CONOCIMIENTO
-# ============================
+    with col6:
+        st.html('<font size=5><font color=#3D6E85>Etnia cada país</font>')
+        
+        etnia_selec = st.selectbox('Selecciona un país:', list_etnia)
 
-st.markdown('<a id="subarea"></a><br><br>', unsafe_allow_html=True)
-with st.container(border=True):
-    st.html('<font size=5><font color=#3D6E85>Migrantes por subárea de conocimiento</font>')
+        condicion = Df_final['Etnia de la persona'] == etnia_selec
+        df_pais = Df_final.groupby('País')['Etnia de la persona'].value_counts().unstack().fillna(0)
+        df_etnia = df_pais[etnia_selec]
 
-    area = st.selectbox('Selecciona un área:', list_areas)
-    subadmin = Df_final[Df_final['Área Conocimiento'] == area]['Sub Area Conocimiento'].value_counts()
+        fig_barras = go.Figure()
+        fig_barras.add_trace(go.Bar(
+            x=df_etnia.values,
+            y=df_etnia.index,
+            orientation='h',
+            marker_color='#4E7F96'
+        ))
 
-    fig_barras2 = go.Figure()
-    fig_barras2.add_trace(go.Bar(
-        x=subadmin.values,
-        y=subadmin.index,
-        orientation='h',
-        marker_color='#4E7F96'
-    ))
+        fig_barras.update_layout(
+            height=400,
+            xaxis_title='Migrantes',
+            yaxis_title='País',
+            showlegend=False
+        )
+        st.plotly_chart(fig_barras, use_container_width=True)
 
-    fig_barras2.update_layout(
-        height=400,
-        xaxis_title='Migrantes por subárea',
-        yaxis_title='Subárea de conocimiento',
-        showlegend=False
-    )
-    st.plotly_chart(fig_barras2, use_container_width=True)
+    col7, col8 = st.columns(2)
 
+    # ============================
+    # SUBÁREA DE CONOCIMIENTO
+    # ============================
+    with col7:
+        st.html('<font size=5><font color=#3D6E85>Migrantes por subárea de conocimiento</font>')
+
+        area = st.selectbox('Selecciona un área:', list_areas)
+        subadmin = Df_final[Df_final['Área Conocimiento'] == area]['Sub Area Conocimiento'].value_counts()
+
+        fig_barras2 = go.Figure()
+        fig_barras2.add_trace(go.Bar(
+            x=subadmin.values,
+            y=subadmin.index,
+            orientation='h',
+            marker_color='#4E7F96'
+        ))
+
+        fig_barras2.update_layout(
+            height=400,
+            xaxis_title='Migrantes por subárea',
+            yaxis_title='Subárea de conocimiento',
+            showlegend=False
+        )
+        st.plotly_chart(fig_barras2, use_container_width=True)
+
+    # ============================
+    # TOP 5 REGIONES DE CADA PAIS CON MAS MIGRANTES
+    # ============================
+    with col8:
+        st.html('<font size=5><font color=#3D6E85>Migrantes establecidos en region</font>')
+
+        pais_select = st.selectbox('Selecciona un país:', list_paises)
+
+        if pais_selec == 'AUSTRALIA' or pais_selec == 'ESTADOS UNIDOS':
+            nombre = 'Estados'
+        else:
+            nombre = 'Provincias'
+
+        df_pais1 = Df_final[Df_final['País'] == pais_selec]
+        regiones = df_pais1['estados de origen'].value_counts().head(5)
+        fig_barras2 = go.Figure()
+        fig_barras2.add_trace(go.Bar(
+            x=regiones.values,
+            y=regiones.index,
+            orientation='h',
+            marker_color='#4E7F96'
+        ))
+
+        fig_barras2.update_layout(
+            height=400,
+            xaxis_title='Migrantes por región',
+            yaxis_title=nombre,
+            showlegend=False
+        )
+        st.plotly_chart(fig_barras2, use_container_width=True)
 
 # ============================
 # REGISTROS POR AÑO
@@ -177,11 +215,11 @@ st.markdown('<a id="registros"></a><br><br>', unsafe_allow_html=True)
 with st.container(border=True):
     st.html('<font size=5><font color=#3D6E85>Número de registros por año</font>')
 
-    registros_ano = Df_final['Año de Registro'].value_counts().sort_index()
+    registros = Df_final['Año de Registro'].value_counts().sort_index()
 
     fig3 = px.line(
-        x=registros_ano.index,
-        y=registros_ano.values,
+        x=registros.index,
+        y=registros.values,
         markers=True,
         title='Número de registros por año',
         labels={'x': 'Año', 'y': 'Registros'},
@@ -189,44 +227,139 @@ with st.container(border=True):
     )
     st.plotly_chart(fig3, use_container_width=True)
 
+registros.index = registros.index.astype(int)
 
-# ============================
-# NIVEL ACADÉMICO Y GÉNERO
-# ============================
-st.markdown('<a id="genero"></a><br><br>', unsafe_allow_html=True)
+# ============================================
+# Cálculo de Totales y Deltas (MANUAL – 2013 a 2025)
+# ============================================
+
+tot_13 = registros[2013]
+tot_14 = registros[2014]
+tot_15 = registros[2015]
+tot_16 = registros[2016]
+tot_17 = registros[2017]
+tot_18 = registros[2018]
+tot_19 = registros[2019]
+tot_20 = registros[2020]
+tot_21 = registros[2021]
+tot_22 = registros[2022]
+tot_23 = registros[2023]
+tot_24 = registros[2024]
+tot_25 = registros[2025]
+
+delta_14 = (tot_14 - tot_13)/tot_13*100
+delta_15 = (tot_15 - tot_14)/tot_14*100
+delta_16 = (tot_16 - tot_15)/tot_15*100
+delta_17 = (tot_17 - tot_16)/tot_16*100
+delta_18 = (tot_18 - tot_17)/tot_17*100
+delta_19 = (tot_19 - tot_18)/tot_18*100
+delta_20 = (tot_20 - tot_19)/tot_19*100
+delta_21 = (tot_21 - tot_20)/tot_20*100
+delta_22 = (tot_22 - tot_21)/tot_21*100
+delta_23 = (tot_23 - tot_22)/tot_22*100
+delta_24 = (tot_24 - tot_23)/tot_23*100
+delta_25 = (tot_25 - tot_24)/tot_24*100
+
+
+# ============================================
+# BLOQUE VISUAL – MISMO FORMATO EXACTO
+# ============================================
+
+st.markdown('<a id="indicadores"></a><br><br>', unsafe_allow_html=True)
+
 with st.container(border=True):
-    st.html('<font size=5><font color=#3D6E85>Nivel académico por género</font>')
 
-    df_gen = Df_final[Df_final['Género'].isin(['FEMENINO', 'MASCULINO'])]
-    nivel_genero = df_gen.groupby('Nivel Académico')['Género'].value_counts().unstack().fillna(0)
+    st.html('<font size=5><font color=#3D6E85>Indicadores de Registros por año</font>')
 
-    fig4 = px.bar(
-        nivel_genero,
-        x=nivel_genero.index,
-        y=['FEMENINO', 'MASCULINO'],
-        barmode='stack',
-        title='Migrantes por nivel académico y género',
-        height=500
-    )
-    st.plotly_chart(fig4, use_container_width=True)
+    # --- MISMAS COLUMNAS Y DISPOSICIÓN EXACTA ---
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric(label='2013', value=tot_13, delta="", border=True)
+    col2.metric(label='2014', value=tot_14, delta=f'{round(delta_14,2)}%', border=True)
+    col3.metric(label='2015', value=tot_15, delta=f'{round(delta_15,2)}%', border=True)
+    col4.metric(label='2016', value=tot_16, delta=f'{round(delta_16,2)}%', border=True)
+
+    col5, col6, col7, col8 = st.columns(4)
+    col5.metric(label='2017', value=tot_17, delta=f'{round(delta_17,2)}%', border=True)
+    col6.metric(label='2018', value=tot_18, delta=f'{round(delta_18,2)}%', border=True)
+    col7.metric(label='2019', value=tot_19, delta=f'{round(delta_19,2)}%', border=True)
+    col8.metric(label='2020', value=tot_20, delta=f'{round(delta_20,2)}%', border=True)
+
+    col9, col10, col11, col12 = st.columns(4)
+    col9.metric(label='2021', value=tot_21, delta=f'{round(delta_21,2)}%', border=True)
+    col10.metric(label='2022', value=tot_22, delta=f'{round(delta_22,2)}%', border=True)
+    col11.metric(label='2023', value=tot_23, delta=f'{round(delta_23,2)}%', border=True)
+    col12.metric(label='2024', value=tot_24, delta=f'{round(delta_24,2)}%', border=True)
+
+    col13, col14, col15, col16 = st.columns(4)
+    col13.metric(label='2025', value=tot_25, delta=f'{round(delta_25,2)}%', border=True)
 
 
-# ============================
-# DISTRIBUCIÓN POR PAÍS
-# ============================
-st.markdown('<a id="tortas"></a><br><br>', unsafe_allow_html=True)
+    with st.container(border=True):
+        df_plot = pd.DataFrame({
+            "Año": [
+                2013, 2014, 2015, 2016, 2017, 2018,
+                2019, 2020, 2021, 2022, 2023, 2024, 2025
+            ],
+            "Registros": [
+                tot_13, tot_14, tot_15, tot_16, tot_17, tot_18,
+                tot_19, tot_20, tot_21, tot_22, tot_23, tot_24, tot_25
+            ]
+        }).set_index("Año")
+
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scatter(
+                x=df_plot.index,
+                y=df_plot["Registros"],
+                mode='lines+markers',
+                line=dict(color="#4E7F96")
+            )
+        )
+        fig.update_layout(height=300)
+        st.plotly_chart(fig, config={'scrollZoom': False})
+
+        st.caption('*Fuente: Datos Abiertos del Gobierno Nacional de Colombia*')
+
+
+
+    # ============================
+    # NIVEL ACADÉMICO Y GÉNERO Y TORTAS
+    # ============================
+st.markdown('<a id="adicionales"></a><br><br>', unsafe_allow_html=True)
 with st.container(border=True):
-    st.html('<font size=5><font color=#3D6E85>Distribución de migrantes por país</font>')
+    col17, col18 = st.columns(2)
+    with col17:
+        st.html('<font size=5><font color=#3D6E85>Nivel académico por género</font>')
 
-    paises_migrantes = Df_final['País'].value_counts()
+        df_gen = Df_final[Df_final['Género'].isin(['FEMENINO', 'MASCULINO'])]
+        nivel_genero = df_gen.groupby('Nivel Académico')['Género'].value_counts().unstack().fillna(0)
 
-    fig5 = px.pie(
-        names=paises_migrantes.index,
-        values=paises_migrantes.values,
-        title='Distribución de migrantes por país',
-        height=500
-    )
-    st.plotly_chart(fig5, use_container_width=True)
+        fig4 = px.bar(
+            nivel_genero,
+            x=nivel_genero.index,
+            y=['FEMENINO', 'MASCULINO'],
+            barmode='stack',
+            title='Migrantes por nivel académico y género',
+            height=500
+        )
+        st.plotly_chart(fig4, use_container_width=True)
+
+
+    # ============================
+    # DISTRIBUCIÓN POR PAÍS
+    # ============================
+    with col18:
+        st.html('<font size=5><font color=#3D6E85>Distribución de migrantes por país</font>')
+
+        paises_migrantes = Df_final['País'].value_counts()
+
+        fig5 = px.pie(
+            names=paises_migrantes.index,
+            values=paises_migrantes.values,
+            title='Distribución de migrantes por país',
+            height=500
+        )
+        st.plotly_chart(fig5, use_container_width=True)
 
 
 # ============================
@@ -254,11 +387,10 @@ with st.sidebar:
     st.html('<font size=4><font color=#3D6E85>Menú de Navegación</font>')
     st.markdown('[Acerca del Dataset](#inicio)')
     st.markdown('[Top 5 departamentos con migrantes](#5dep)')
-    st.markdown('[Migrantes por grupo de edad](#edad)')
-    st.markdown('[Subárea de conocimiento](#subarea)')
+    st.markdown('[Explorador](#explorador)')
     st.markdown('[Registros por año](#registros)')
-    st.markdown('[Nivel académico por género](#genero)')
-    st.markdown('[Distribución por país](#tortas)')
+    st.markdown('[Indicadores](#indicadores')
+    st.markdown('[Adicionales](#adicionales)')
     st.markdown('---')
     st.caption('jarmando.canas@udea.edu.co \n mariana.trujillo2@udea.edu.co')
     
