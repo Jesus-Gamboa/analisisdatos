@@ -22,6 +22,7 @@ paises = Df_final['País'].nunique()
 list_paises = Df_final['País'].unique().tolist()
 numero_etnias = Df_final['Etnia de la persona'].nunique()
 list_areas = Df_final['Área Conocimiento'].dropna().unique().tolist()
+list_etnia = Df_final['Etnia de la persona'].dropna().unique().tolist()
 
 # ============================
 # CONFIGURACIÓN STREAMLIT
@@ -49,6 +50,7 @@ st.caption('Aplicación desarrollada por Jesus Cañas y Mariana Trujillo')
 # MÉTRICAS
 # ============================
 
+st.markdown('<a id="inicio"></a><br><br>', unsafe_allow_html=True)
 with st.container(border=True):
     st.html('<font size=5><font color=#3D6E85>Acerca del Conjunto de Datos</font>')
 
@@ -65,6 +67,7 @@ with st.container(border=True):
 # TOP 5 DEPARTAMENTOS
 # ============================
 
+st.markdown('<a id="5dep"></a><br><br>', unsafe_allow_html=True)
 with st.expander('Top 5 departamentos con más migrantes'):
     departamento = Df_final['departamento de origen'].value_counts().head(7)
     df_plot = departamento.reset_index()
@@ -83,13 +86,13 @@ with st.expander('Top 5 departamentos con más migrantes'):
 # ============================
 # GRUPO DE EDAD POR PAÍS
 # ============================
-
+st.markdown('<a id="edad"></a><br><br>', unsafe_allow_html=True)
 with st.container(border=True):
     st.html('<font size=5><font color=#3D6E85>Migrantes por grupo de edad en cada país</font>')
 
     pais_selec = st.selectbox('Selecciona un país:', list_paises)
 
-    df_edad = Df_final.groupby(['País', 'Grupo edad']).size().unstack().T.fillna(0)
+    df_edad = Df_final.groupby('Grupo edad')['País'].value_counts().unstack().fillna(0)
     df_pais = df_edad[pais_selec]
 
     fig_barras = go.Figure()
@@ -107,12 +110,42 @@ with st.container(border=True):
         showlegend=False
     )
     st.plotly_chart(fig_barras, use_container_width=True)
+# ============================
+# GRUPO DE etnia POR PAÍS
+# ============================
+
+st.markdown('<a id="etnia"></a><br><br>', unsafe_allow_html=True)
+with st.container(border=True):
+    st.html('<font size=5><font color=#3D6E85>Etnia cada país</font>')
+    
+    etnia_selec = st.selectbox('Selecciona un país:', list_etnia)
+
+    condicion = Df_final['Etnia de la persona'] == etnia_selec
+    df_pais = Df_final.groupby('País')['Etnia de la persona'].value_counts().unstack().fillna(0)
+    df_etnia = df_pais[etnia_selec]
+
+    fig_barras = go.Figure()
+    fig_barras.add_trace(go.Bar(
+        x=df_etnia.values,
+        y=df_etnia.index,
+        orientation='h',
+        marker_color='#4E7F96'
+    ))
+
+    fig_barras.update_layout(
+        height=400,
+        xaxis_title='Migrantes',
+        yaxis_title='País',
+        showlegend=False
+    )
+    st.plotly_chart(fig_barras, use_container_width=True)
 
 
 # ============================
 # SUBÁREA DE CONOCIMIENTO
 # ============================
 
+st.markdown('<a id="subarea"></a><br><br>', unsafe_allow_html=True)
 with st.container(border=True):
     st.html('<font size=5><font color=#3D6E85>Migrantes por subárea de conocimiento</font>')
 
@@ -140,6 +173,7 @@ with st.container(border=True):
 # REGISTROS POR AÑO
 # ============================
 
+st.markdown('<a id="registros"></a><br><br>', unsafe_allow_html=True)
 with st.container(border=True):
     st.html('<font size=5><font color=#3D6E85>Número de registros por año</font>')
 
@@ -159,7 +193,7 @@ with st.container(border=True):
 # ============================
 # NIVEL ACADÉMICO Y GÉNERO
 # ============================
-
+st.markdown('<a id="genero"></a><br><br>', unsafe_allow_html=True)
 with st.container(border=True):
     st.html('<font size=5><font color=#3D6E85>Nivel académico por género</font>')
 
@@ -180,7 +214,7 @@ with st.container(border=True):
 # ============================
 # DISTRIBUCIÓN POR PAÍS
 # ============================
-
+st.markdown('<a id="tortas"></a><br><br>', unsafe_allow_html=True)
 with st.container(border=True):
     st.html('<font size=5><font color=#3D6E85>Distribución de migrantes por país</font>')
 
@@ -200,14 +234,32 @@ with st.container(border=True):
 # ============================
 
 with st.sidebar:
-    st.markdown('## Navegación')
-    st.markdown('- [Acerca del Dataset](#)')
-    st.markdown('- Top 5 departamentos con migrantes')
-    st.markdown('- Migrantes por grupo de edad')
-    st.markdown('- Subárea de conocimiento')
-    st.markdown('- Registros por año')
-    st.markdown('- Nivel académico por género')
-    st.markdown('- Distribución por país')
+
+    st.markdown('''
+                <style>
+                [data-testid="stSidebar"] a {
+                    display: block;
+                    color: #3D6E85;
+                    text-decoration: none;
+                    padding: 10px 5px;
+                    border-radius: 6px;
+                }
+                [data-testid="stSidebar"] a:hover {
+                    background-color: #FFFFFF;
+                }
+                </style>
+                ''',
+                unsafe_allow_html=True)
+    
+    st.html('<font size=4><font color=#3D6E85>Menú de Navegación</font>')
+    st.markdown('[Acerca del Dataset](#inicio)')
+    st.markdown('[Top 5 departamentos con migrantes](#5dep)')
+    st.markdown('[Migrantes por grupo de edad](#edad)')
+    st.markdown('[Subárea de conocimiento](#subarea)')
+    st.markdown('[Registros por año](#registros)')
+    st.markdown('[Nivel académico por género](#genero)')
+    st.markdown('[Distribución por país](#tortas)')
+    st.markdown('---')
     st.caption('jarmando.canas@udea.edu.co - mariana.trujillo2@udea.edu.co')
 # ============================
     
