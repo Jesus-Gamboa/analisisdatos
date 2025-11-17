@@ -250,25 +250,24 @@ with st.container(border=True):
     st.html('<font size=5><font color=#3D6E85>Indicadores de Registros por año</font>')
 
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric(label='2013', value=tot_13, delta="", border=True)
-    col2.metric(label='2014', value=tot_14, delta=f'{round(delta_14,2)}%', border=True)
-    col3.metric(label='2015', value=tot_15, delta=f'{round(delta_15,2)}%', border=True)
-    col4.metric(label='2016', value=tot_16, delta=f'{round(delta_16,2)}%', border=True)
+    col1.metric(label='2014', value=tot_14, delta=f'{round(delta_14,2)}%', border=True)
+    col2.metric(label='2015', value=tot_15, delta=f'{round(delta_15,2)}%', border=True)
+    col3.metric(label='2016', value=tot_16, delta=f'{round(delta_16,2)}%', border=True)
+    col4.metric(label='2017', value=tot_17, delta=f'{round(delta_17,2)}%', border=True)
 
+    # --- FILA 2: 2018–2021 ---
     col5, col6, col7, col8 = st.columns(4)
-    col5.metric(label='2017', value=tot_17, delta=f'{round(delta_17,2)}%', border=True)
-    col6.metric(label='2018', value=tot_18, delta=f'{round(delta_18,2)}%', border=True)
-    col7.metric(label='2019', value=tot_19, delta=f'{round(delta_19,2)}%', border=True)
-    col8.metric(label='2020', value=tot_20, delta=f'{round(delta_20,2)}%', border=True)
+    col5.metric(label='2018', value=tot_18, delta=f'{round(delta_18,2)}%', border=True)
+    col6.metric(label='2019', value=tot_19, delta=f'{round(delta_19,2)}%', border=True)
+    col7.metric(label='2020', value=tot_20, delta=f'{round(delta_20,2)}%', border=True)
+    col8.metric(label='2021', value=tot_21, delta=f'{round(delta_21,2)}%', border=True)
 
+    # --- FILA 3: 2022–2025 ---
     col9, col10, col11, col12 = st.columns(4)
-    col9.metric(label='2021', value=tot_21, delta=f'{round(delta_21,2)}%', border=True)
-    col10.metric(label='2022', value=tot_22, delta=f'{round(delta_22,2)}%', border=True)
-    col11.metric(label='2023', value=tot_23, delta=f'{round(delta_23,2)}%', border=True)
-    col12.metric(label='2024', value=tot_24, delta=f'{round(delta_24,2)}%', border=True)
-
-    col13, col14, col15, col16 = st.columns(4)
-    col13.metric(label='2025', value=tot_25, delta=f'{round(delta_25,2)}%', border=True)
+    col9.metric(label='2022', value=tot_22, delta=f'{round(delta_22,2)}%', border=True)
+    col10.metric(label='2023', value=tot_23, delta=f'{round(delta_23,2)}%', border=True)
+    col11.metric(label='2024', value=tot_24, delta=f'{round(delta_24,2)}%', border=True)
+    col12.metric(label='2025', value=tot_25, delta=f'{round(delta_25,2)}%', border=True)
 
     with st.container(border=True):
         df_plot = pd.DataFrame({
@@ -283,12 +282,14 @@ with st.container(border=True):
         }).set_index("Año")
 
         fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x=df_plot.index,
-            y=df_plot["Registros"],
-            mode='lines+markers',
-            line=dict(color="#4E7F96")
-        ))
+        fig.add_trace(
+            go.Scatter(
+                x=df_plot.index,
+                y=df_plot["Registros"],
+                mode='lines+markers',
+                line=dict(color="#4E7F96")
+            )
+        )
         fig.update_layout(height=300)
         st.plotly_chart(fig, config={'scrollZoom': False})
 
@@ -301,12 +302,12 @@ with st.container(border=True):
 st.markdown('<a id="adicionales"></a><br><br>', unsafe_allow_html=True)
 with st.container(border=True):
 
-    col17, col18 = st.columns(2)
+    col13, col14 = st.columns(2)
 
     # ============================
     # NIVEL ACADÉMICO POR GÉNERO
     # ============================
-    with col17:
+    with col13:
         st.html('<font size=5><font color=#3D6E85>Nivel académico por género</font>')
 
         df_gen = Df_final[Df_final['Género'].isin(['FEMENINO', 'MASCULINO'])]
@@ -325,7 +326,7 @@ with st.container(border=True):
     # ============================
     # TORTA PAÍSES
     # ============================
-    with col18:
+    with col14:
         st.html('<font size=5><font color=#3D6E85>Distribución de migrantes por país</font>')
 
         paises_migrantes = Df_final['País'].value_counts()
