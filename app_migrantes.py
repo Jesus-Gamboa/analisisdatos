@@ -10,7 +10,7 @@ import streamlit as st
 # CARGA DE DATOS
 # ============================
 
-Df_final = pd.read_parquet("data/migrantes_limpio.parquet")
+Df_final = pd.read_parquet("data/migrantes.parquet")
 
 # =====================================
 # VARIABLES PARA MÉTRICAS
@@ -260,6 +260,5 @@ with st.sidebar:
     st.markdown('[Nivel académico por género](#genero)')
     st.markdown('[Distribución por país](#tortas)')
     st.markdown('---')
-    st.caption('jarmando.canas@udea.edu.co - mariana.trujillo2@udea.edu.co')
-# ============================
+    st.caption('jarmando.canas@udea.edu.co --- mariana.trujillo2@udea.edu.co')
     
