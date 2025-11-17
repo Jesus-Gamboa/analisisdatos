@@ -190,7 +190,7 @@ with st.container(border=True):
             nombre = 'Provincias'
 
         df_pais1 = Df_final[Df_final['País'] == pais_selec]
-        regiones = df_pais1['estados de origen'].value_counts().head(5)
+        regiones = df_pais1['Estado de residencia'].value_counts().head(5)
         fig_barras2 = go.Figure()
         fig_barras2.add_trace(go.Bar(
             x=regiones.values,
