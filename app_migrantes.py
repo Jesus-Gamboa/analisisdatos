@@ -102,7 +102,7 @@ with st.container(border=True):
 
 st.markdown('<a id="5dep"></a><br><br>', unsafe_allow_html=True)
 with st.expander('Top 5 departamentos con más migrantes'):
-    departamento = Df_final['departamento de origen'].value_counts().head(7)
+    departamento = Df_final['departamento de origen'].value_counts()
     df_plot = departamento.reset_index()
     df_plot.columns = ['Departamento', 'Migrantes']
 
@@ -121,18 +121,19 @@ with st.expander('Top 5 departamentos con más migrantes'):
 
 st.markdown('<a id="5area"></a><br><br>', unsafe_allow_html=True)
 with st.expander('Top 5 Areas de conocimiento'):
-    area = Df_final['Área Conocimiento'].value_counts().head(7)
-    df_plot = area.reset_index()
-    df_plot.columns = ['Área de conocimento', 'Migrantes']
+    area = Df_final['Área Conocimiento'].value_counts().reset_index()
+    area.columns = ['Área Conocimiento', 'Cantidad']
 
     fig2 = px.bar(
-        df_plot.head(5),
-        x='Migrantes', y='Area de conocimiento',
-        color='Departamento',
-        title='Top 5 departamentos con mayor número de migrantes',
+        area.head(5),
+        x='Área Conocimiento',
+        y='Cantidad',
+        color='Área Conocimiento',
+        title='Top 5 áreas con mayor número de migrantes',
         height=500
     )
     st.plotly_chart(fig2, use_container_width=True)
+
 
 
 # ============================
@@ -382,8 +383,8 @@ with st.sidebar:
 
     st.html('<font size=4><font color=#3D6E85>Menú de Navegación</font>')
     st.markdown('[Acerca del Dataset](#inicio)')
-    st.markdown('[Top 5 departamentos con migrantes](#5area)')
-    st.markdown('[Top 5 Areas con migrantes](#5dep)')
+    st.markdown('[Top 5 departamentos con migrantes](#5dep)')
+    st.markdown('[Top 5 Areas con migrantes](#5area)')
     st.markdown('[Explorador](#explorador)')
     st.markdown('[Indicadores](#indicadores)')
     st.markdown('[Adicionales](#adicionales)')
