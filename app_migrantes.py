@@ -28,7 +28,7 @@ registros = Df_final['Año de Registro'].value_counts().sort_index()
 registros.index = registros.index.astype(int)
 
 # ============================================
-# Cálculo de Totales y Deltas (MANUAL – 2013 a 2025)
+# Cálculo de Totales y Deltas 
 # ============================================
 
 tot_13 = registros[2013]
