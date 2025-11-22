@@ -116,6 +116,26 @@ with st.expander('Top 5 departamentos con más migrantes'):
     st.plotly_chart(fig2, use_container_width=True)
 
 # ============================
+# TOP 5 AREAS DE CONOCIMIENTO
+# ============================
+
+st.markdown('<a id="5dep"></a><br><br>', unsafe_allow_html=True)
+with st.expander('Top 5 departamentos con más migrantes'):
+    area = Df_final['Área'].value_counts().head(7)
+    df_plot = area.reset_index()
+    df_plot.columns = ['Área de conocimento', 'Migrantes']
+
+    fig2 = px.bar(
+        df_plot.head(5),
+        x='Migrantes', y='Area de conocimiento',
+        color='Departamento',
+        title='Top 5 departamentos con mayor número de migrantes',
+        height=500
+    )
+    st.plotly_chart(fig2, use_container_width=True)
+
+
+# ============================
 # EXPLORADOR
 # ============================
 
