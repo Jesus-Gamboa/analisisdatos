@@ -382,7 +382,7 @@ with st.sidebar:
 
     st.html('<font size=4><font color=#3D6E85>Menú de Navegación</font>')
     st.markdown('[Acerca del Dataset](#inicio)')
-    st.markdown('[Top 5 departamentos con migrantes](#5dep)')
+    st.markdown('[Top 5 departamentos con migrantes](#5area)')
     st.markdown('[Top 5 Areas con migrantes](#5dep)')
     st.markdown('[Explorador](#explorador)')
     st.markdown('[Indicadores](#indicadores)')
