@@ -119,9 +119,9 @@ with st.expander('Top 5 departamentos con más migrantes'):
 # TOP 5 AREAS DE CONOCIMIENTO
 # ============================
 
-st.markdown('<a id="5dep"></a><br><br>', unsafe_allow_html=True)
-with st.expander('Top 5 departamentos con más migrantes'):
-    area = Df_final['Área'].value_counts().head(7)
+st.markdown('<a id="5area"></a><br><br>', unsafe_allow_html=True)
+with st.expander('Top 5 Areas de conocimiento'):
+    area = Df_final['Área Conocimiento'].value_counts().head(7)
     df_plot = area.reset_index()
     df_plot.columns = ['Área de conocimento', 'Migrantes']
 
@@ -383,6 +383,7 @@ with st.sidebar:
     st.html('<font size=4><font color=#3D6E85>Menú de Navegación</font>')
     st.markdown('[Acerca del Dataset](#inicio)')
     st.markdown('[Top 5 departamentos con migrantes](#5dep)')
+    st.markdown('[Top 5 Areas con migrantes](#5dep)')
     st.markdown('[Explorador](#explorador)')
     st.markdown('[Indicadores](#indicadores)')
     st.markdown('[Adicionales](#adicionales)')
